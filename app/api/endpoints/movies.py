@@ -24,8 +24,8 @@ async def search_movies(
     if not title and not actor and not genre:
         raise HTTPException(status_code=400, detail="At least one of 'title', 'actor', or 'genre' must be provided.")
     
-    # Use a broad search if only actor/genre is provided
-    search_query = title if title else (actor or genre or "a") # Fallback to a common letter
+    #  broad search if only actor/genre is provided
+    search_query = title if title else (actor or genre or "a")
 
     omdb_task = omdb_service.search(search_query, movie_type=type)
     tmdb_task = tmdb_service.search(search_query, movie_type=type)

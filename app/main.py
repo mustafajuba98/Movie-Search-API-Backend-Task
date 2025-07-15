@@ -22,10 +22,10 @@ async def lifespan(app: FastAPI):
     """
     # Initialize cache
     FastAPICache.init(InMemoryBackend(), prefix="fastapi-cache")
-    print("FastAPI Cache initialized with In-memory backend.")
+    print("FastAPI Cache initialized 'In memory'")
     yield
     # yield top separates startup from shutdown logic 
-    print("Closing FastAPI Cache.")
+    print("FastAPI Cache closing")
     FastAPICache.reset()
 
 app = FastAPI(

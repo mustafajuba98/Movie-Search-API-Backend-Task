@@ -209,3 +209,20 @@ http://127.0.0.1:8000/movies/search?title=The Dark Knight&actor=Heath Ledger&gen
     3.  **Local Database Sync**: For a production-grade application, a background worker could synchronize data from external APIs into a local database (e.g., PostgreSQL). This would allow for incredibly fast and complex queries directly on our data, completely eliminating the N+1 issue at the source.
 
 ---
+
+
+
+
+
+Dear Hossam and the Tripklik Team,
+I hope this email finds you well.
+I am pleased to inform you that I have completed the Movie Search API Backend Task. I enjoyed the challenge and found it to be a great opportunity to work with FastAPI.
+The complete project, including the source code, detailed documentation, and setup instructions, is available on my public GitHub repository here:
+https://github.com/mustafajuba98/Movie-Search-API-Backend-Task
+In this implementation, I focused on building a robust and performant solution. Key features include:
+Full support for all required search filters (title, type, actor, and genre).
+A two-level caching strategy to significantly reduce latency and external API calls.
+A suite of integration tests to ensure the API's reliability.
+I am very keen to discuss my design decisions and technical approach with you. Thank you again for this opportunity.
+Best regards,
+Mustafa Muhammed
