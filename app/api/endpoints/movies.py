@@ -10,21 +10,17 @@ router = APIRouter()
 @router.get("/search", response_model=MovieSearchResult)
 @cache(expire=3600)
 async def search_movies(
-    #َ Queries
     title: Optional[str] = Query(None, min_length=2, description="Movie title to search for."),
     type: Optional[MovieType] = Query(None, description="Filter by type (movie or series)."),
     actor: Optional[str] = Query(None, description="Filter by actor name (case-insensitive)."),
     genre: Optional[str] = Query(None, description="Filter by genre (case-insensitive)."),
 
-    # DIP (Depends)
     omdb_service: OMDBService = Depends(get_omdb_service),
     tmdb_service: TMDBService = Depends(get_tmdb_service)
 ):
-    # this , this or that 
     if not title and not actor and not genre:
         raise HTTPException(status_code=400, detail="At least one of 'title', 'actor', or 'genre' must be provided.")
     
-    #  broad search if only actor/genre is provided
     search_query = title if title else (actor or genre or "a")
 
     omdb_task = omdb_service.search(search_query, movie_type=type)
