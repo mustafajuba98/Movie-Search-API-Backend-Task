@@ -4,7 +4,7 @@ from app.api.endpoints import movies
 from app.core.exceptions import ServiceUnavailable
 
 
-# cash imports 
+
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.inmemory import InMemoryBackend
 from fastapi_cache.decorator import cache
@@ -13,18 +13,15 @@ from contextlib import asynccontextmanager
 
 
 
-# Lifespan context manager for startup and shutdown events
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
     Handles application startup and shutdown events.
     Initializes the cache on startup and closes it on shutdown.
     """
-    # Initialize cache
     FastAPICache.init(InMemoryBackend(), prefix="fastapi-cache")
     print("FastAPI Cache initialized 'In memory'")
     yield
-    # yield top separates startup from shutdown logic 
     print("FastAPI Cache closing")
     FastAPICache.reset()
 
@@ -32,7 +29,7 @@ app = FastAPI(
     title="Movie Search API",
     description="An API to search for movies using multiple external providers. Made with love and FastAPI.",
     version="1.0.0",
-    lifespan=lifespan # -- << --
+    lifespan=lifespan 
 )
 
 @app.exception_handler(ServiceUnavailable)
