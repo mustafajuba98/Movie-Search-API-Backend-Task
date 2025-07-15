@@ -15,7 +15,6 @@ from app.core.config import get_settings
 from app.core.exceptions import ServiceUnavailable
 
 
-# new protocol
 
 class MovieSearchService(Protocol):
     """
@@ -27,16 +26,6 @@ class MovieSearchService(Protocol):
         """Searches for movies based on a query string."""
         ...
 
-
-# poster needs to be built not provided well by the api
-# title  : check or  (original_title )
-# year : release date
-# imdb_id : ....
-# type : .....
-
-
-
-# implementations
 
 class OMDBService:
     def __init__(self, api_key: str):
@@ -61,7 +50,6 @@ class OMDBService:
                     for movie_data in movies_data:
                         try:
                             movie_data['source_api'] = 'OMDB'
-                            # empty lists for new fields to match => model
                             movie_data['genres'] = []
                             movie_data['actors'] = []
                             validated_movies.append(Movie(**movie_data))
@@ -89,10 +77,9 @@ class TMDBService:
         self.api_key = api_key
         self.base_url = "https://api.themoviedb.org/3"
 
-    @cache(expire=86400) #  24 hrs
+    @cache(expire=86400) 
     async def _get_details(self, client: httpx.AsyncClient, item_id: int, search_type: Literal["movie", "tv"]) -> Dict:
         """Fetches full details including genres and actors for a single item."""
-        # print(f"Fetching details for {search_type} ID: {item_id} ")
 
         details_url = f"{self.base_url}/{search_type}/{item_id}"
         credits_url = f"{self.base_url}/{search_type}/{item_id}/credits"
@@ -110,7 +97,7 @@ class TMDBService:
         credits_data = credits_response.json()
 
         genres = [genre['name'] for genre in details_data.get('genres', [])]
-        actors = [actor['name'] for actor in credits_data.get('cast', [])[:5]] # Top 5 actors
+        actors = [actor['name'] for actor in credits_data.get('cast', [])[:5]] 
 
         return {"genres": genres, "actors": actors}
 
@@ -129,7 +116,6 @@ class TMDBService:
         if not search_results:
             return []
 
-        # Fetch details for all search results concurrently     N+1 => cached
         details_tasks = [self._get_details(client, item['id'], search_type) for item in search_results]
         details_list = await asyncio.gather(*details_tasks)
 
@@ -154,7 +140,6 @@ class TMDBService:
                 print(f"TMDB validation error for {item_data.get('title') or item_data.get('name')}: {e}")
         return validated_movies
 
-    # Main search function
     async def search(self, query: str, movie_type: Optional[MovieType] = None) -> List[Movie]:
         async with httpx.AsyncClient() as client:
             tasks = []
@@ -184,11 +169,6 @@ class TMDBService:
                     status_code=500,
                     detail=str(e)
                 )
-
-
-
-#DIP 
-# Dependency inj providers
 
 def get_omdb_service() -> OMDBService:
     settings = get_settings()
