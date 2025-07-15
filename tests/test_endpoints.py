@@ -1,5 +1,3 @@
-# tests/test_endpoints.py
-
 import pytest
 from httpx import AsyncClient, ASGITransport
 from fastapi import status
